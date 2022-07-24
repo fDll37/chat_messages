@@ -96,21 +96,21 @@ class LoginViewController: UIViewController {
                                  y: 20,
                                  width: size,
                                  height: size)
-
+        
         emailField.frame = CGRect(x: 30,
                                   y: imageView.bottom + 10,
                                   width: scrollView.width - 60,
                                   height: 52)
-
+        
         passwordField.frame = CGRect(x: 30,
                                      y: emailField.bottom + 10,
                                      width: scrollView.width - 60,
-                                    height: 52)
+                                     height: 52)
         
         loginButton.frame = CGRect(x: 30,
-                                     y: passwordField.bottom + 10,
-                                     width: scrollView.width - 60,
-                                    height: 52)
+                                   y: passwordField.bottom + 10,
+                                   width: scrollView.width - 60,
+                                   height: 52)
         
     }
     
