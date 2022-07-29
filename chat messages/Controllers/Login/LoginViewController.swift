@@ -121,25 +121,38 @@ class LoginViewController: UIViewController {
         passwordField.resignFirstResponder()
         
         guard let email = emailField.text, let password = passwordField.text, !email.isEmpty, !password.isEmpty, password.count >= 6 else{
-            alertuserLoginError()
+            alertUserLoginError()
             return
         }
         
-        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: { authResult, error in
-            guard let result = authResult, error == nil else {
-                print("Failed to log in with email: \(email)")
+        DatabaseManager.shared.userExists(with: email, completion: {[weak self] exists in
+            guard let strongSelf = self else {
+                return
+            }
+            guard !exists else {
+                strongSelf.alertUserLoginError(message: "User already exists")
+                // user already exists
                 return
             }
             
-            let user = result.user
-            print("logged in User: \(user)")
+            FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: { authResult, error in
+                guard let result = authResult, error == nil else {
+                    print("Failed to log in with email: \(email)")
+                    return
+                }
+                
+                let user = result.user
+                print("logged in User: \(user)")
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            })
         })
+    
         
     }
     
-    func alertuserLoginError() {
+    func alertUserLoginError(message: String = "Please enter all information to login") {
         let alert = UIAlertController(title: "Woops",
-                                      message: "Please enter all information to login",
+                                      message: message,
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss",
                                       style: .cancel))
